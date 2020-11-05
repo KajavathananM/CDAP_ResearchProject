@@ -1,0 +1,63 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.chaquo.python'
+apply plugin: 'com.google.gms.google-services' 
+android {
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
+    defaultConfig {
+        applicationId "com.example.cdap_nutritiontracking"
+        minSdkVersion 28
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters "armeabi-v7a", "x86", "arm64-v8a"
+        }
+        python {
+            //buildPython "C:/Users/mkvat/AppData/Local/Programs/Python/Python37-32/python.exe"
+            //buildPython "C:/Users/mkvat/Anaconda3/envs/tensorflow_cpu/python.exe"
+            pip {
+                install "scipy" 
+                install "pandas"  
+                install "pillow" 
+                install "matplotlib" 
+                install "tensorflow==2.1.0"
+                install "keras==2.3.1"
+                install "git+https://github.com/buguroo/pyknow.git"
+                install "opencv-python"
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main {
+            jni {
+                srcDirs 'src/main/jniLibs'
+            };
+            python {
+                srcDirs 'src/main/python'
+            }
+        }
+    }
+}
+repositories {
+        maven { url 'https://jitpack.io' }
+}
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation project(path: ':OpenCV-android-sdk')
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-database:16.0.1'
+}

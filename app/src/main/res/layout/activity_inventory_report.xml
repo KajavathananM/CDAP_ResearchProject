@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFD700"
+    tools:context=".InventoryReportActivity">
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="417dp"
+        android:layout_height="99dp"
+        android:background="#FF4500"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.003" />
+     <TextView
+        android:id="@+id/textView2"
+        android:layout_width="218dp"
+        android:layout_height="41dp"
+        android:text="SMKitchenTracker"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintHorizontal_bias="0.88"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.046" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="71dp"
+        android:layout_height="77dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.282"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.022"
+        app:srcCompat="@drawable/smk_logo" />
+
+    <HorizontalScrollView
+        android:layout_width="414dp"
+        android:layout_height="725dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/view"
+        app:layout_constraintVertical_bias="1.0">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="344dp"
+                android:layout_height="31dp"
+                android:layout_marginEnd="600dp"
+                android:layout_marginBottom="100dp"
+                android:text="Stock Movement Report"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.125"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.22000003" />
+
+            <ScrollView
+                android:layout_width="1017dp"
+                android:layout_height="199dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="80dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.19999999">
+
+                <TableLayout
+                    android:id="@+id/RTable"
+                    android:layout_width="1000dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="600dp"
+                    android:orientation="vertical">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#32CD32">
+
+                        <TextView
+                            android:id="@+id/textView6"
+                            android:layout_width="171dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="Item Code"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView9"
+                            android:layout_width="189dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="Item Name"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView11"
+                            android:layout_width="242dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Measurement Unit"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView13"
+                            android:layout_width="146dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Unit Cost"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <!--Stock at Start Date-->
+                        <TextView
+                            android:id="@+id/textView14t"
+                            android:layout_width="173dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Start Date"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView14"
+                            android:layout_width="187dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Opening Stock"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView16"
+                            android:layout_width="210dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="Purchase"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView17"
+                            android:layout_width="200dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Consumption"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView14g"
+                            android:layout_width="176dp"
+                            android:layout_height="23dp"
+                            android:layout_weight="1"
+                            android:text="End Date"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView18"
+                            android:layout_width="323dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:text="\t\tClosing Stock"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                    </TableRow>
+                </TableLayout>
+            </ScrollView>
+
+            <TextView
+                android:id="@+id/title2"
+                android:layout_width="195dp"
+                android:layout_height="28dp"
+                android:layout_marginEnd="600dp"
+                android:layout_marginBottom="100dp"
+                android:text="Bower Stock Report"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.21"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.63" />
+
+            <ScrollView
+                android:id="@+id/scrollView4"
+                android:layout_width="1217dp"
+                android:layout_height="188dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="80dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.72">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="480dp">
+
+                    <TableLayout
+                        android:id="@+id/DTable"
+                        android:layout_width="1000dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="217dp"
+                        android:layout_marginBottom="80dp"
+                        app:layout_constraintBottom_toTopOf="@+id/BTable"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="#32CD32">
+
+
+                            <TextView
+                                android:id="@+id/textView60"
+                                android:layout_width="24dp"
+                                android:layout_height="22dp"
+                                android:layout_weight="1"
+                                android:text="Item Code"
+                                android:textColor="#FFFFFF"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView61"
+                                android:layout_width="30dp"
+                                android:layout_height="24dp"
+                                android:layout_weight="1"
+                                android:text="Item Name"
+                                android:textColor="#FFFFFF"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView62"
+                                android:layout_width="80dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Planned Delivery Date"
+                                android:textColor="#FFFFFF"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView63"
+                                android:layout_width="3dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Order Date"
+                                android:textColor="#FFFFFF"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView64"
+                                android:layout_width="105dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:text="Lead Time"
+                                android:textColor="#FFFFFF"
+                                android:textStyle="bold" />
+
+                        </TableRow>
+                    </TableLayout>
+
+                    <TableLayout
+                        android:id="@+id/BTable"
+                        android:layout_width="979dp"
+                        android:layout_height="350dp"
+                        android:layout_marginEnd="217dp"
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0">
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="#32CD32">
+
+                            <TextView
+                                android:id="@+id/textView40"
+                                android:layout_width="156dp"
+                                android:layout_height="22dp"
+                                android:layout_weight="1"
+                                android:text="Item Code"
+                                android:textColor="#FFFFFF"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView41"
+                                android:layout_width="201dp"
+                                android:layout_height="24dp"
+                                android:layout_weight="1"
+                                android:text="Item Name"
+                                android:textColor="#FFFFFF"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView42"
+                                android:layout_width="179dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Measurement Unit"
+                                android:textColor="#FFFFFF"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView43"
+                                android:layout_width="229dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Average Spoilage Rate"
+                                android:textColor="#FFFFFF"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView44"
+                                android:layout_width="254dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Average Consumption Rate"
+                                android:textColor="#FFFFFF"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView48"
+                                android:layout_width="167dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Bower Stock"
+                                android:textColor="#FFFFFF"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView46"
+                                android:layout_width="128dp"
+                                android:layout_height="20dp"
+                                android:layout_weight="1"
+                                android:text="EOQ"
+                                android:textColor="#FFFFFF"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView47"
+                                android:layout_width="274dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Reorder Level"
+                                android:textColor="#FFFFFF"
+                                android:textStyle="bold" />
+                        </TableRow>
+                    </TableLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </ScrollView>
+
+            <Button
+                android:id="@+id/f1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="1169dp"
+                android:layout_marginBottom="20dp"
+                android:background="#32CD32"
+                android:text="Filter Stock Movement"
+                android:textColor="#FFFFFF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.059" />
+
+            <Button
+                android:id="@+id/f3"
+                android:layout_width="117dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="1169dp"
+                android:layout_marginBottom="20dp"
+                android:background="#32CD32"
+                android:text="Clear Filter"
+                android:textColor="#FFFFFF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.139" />
+
+            <Button
+                android:id="@+id/f2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="27dp"
+                android:background="#32CD32"
+                android:text="Filter Bowel Stock"
+                android:textColor="#FFFFFF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/f1"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.060000002" />
+
+            <Button
+                android:id="@+id/viewEOQ"
+                android:layout_width="246dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="80dp"
+                android:layout_marginEnd="1176dp"
+                android:layout_marginBottom="40dp"
+                android:background="#32CD32"
+                android:text="View EOQ Graph"
+                android:textColor="#FFFFFF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/scrollView4"
+                app:layout_constraintVertical_bias="1.0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </HorizontalScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "114655037955",
+    "firebase_url": "https://smkitchendb.firebaseio.com",
+    "project_id": "smkitchendb",
+    "storage_bucket": "smkitchendb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:114655037955:android:eac1cfb0afb5bd6f035c36",
+        "android_client_info": {
+          "package_name": "com.example.cdap_nutritiontracking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "114655037955-682uiad9tater8gc8ivfi6h41va7h0g6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cdap_nutritiontracking",
+            "certificate_hash": "379a2c21053767ad6532bce85548b7ae6f54fad3"
+          }
+        },
+        {
+          "client_id": "114655037955-gud894gk6eiq15hq4jnubmee9k7k2ct7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5BsNn7NyrpddXAbceEe-728RYzt_CSDg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "114655037955-gud894gk6eiq15hq4jnubmee9k7k2ct7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

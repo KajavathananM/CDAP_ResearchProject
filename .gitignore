@@ -1,0 +1,6 @@
+# Project exclude paths
+/.gradle/
+/app/build/
+/app/build/intermediates/javac/debug/classes/
+/OpenCV-android-sdk/build/
+/OpenCV-android-sdk/build/intermediates/javac/debug/classes/

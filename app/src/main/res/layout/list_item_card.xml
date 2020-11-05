@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:descendantFocusability="beforeDescendants"
+	android:paddingLeft="15dp"
+	android:paddingRight="15dp">
+
+	<View
+		android:id="@+id/view2"
+		android:layout_width="419dp"
+		android:layout_height="120dp"
+		android:background="#32CD32"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+
+	<ImageView
+		android:id="@+id/foodPic"
+		android:layout_width="95dp"
+		android:layout_height="95dp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintHorizontal_bias="0.053"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintVertical_bias="0.0"
+		app:srcCompat="@drawable/fridge" />
+
+	<ScrollView
+		android:id="@+id/itemScroller"
+		android:layout_width="218dp"
+		android:layout_height="58dp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.8"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintVertical_bias="0.3">
+
+		<TableLayout
+			android:id="@+id/itemsDetail"
+			android:layout_width="fill_parent"
+			android:layout_height="10dp">
+
+			<HorizontalScrollView>
+
+				<TableRow
+					android:layout_width="wrap_content"
+					android:layout_height="match_parent">
+
+					<TextView
+						android:id="@+id/labelFoodName"
+						android:layout_width="102dp"
+						android:layout_height="match_parent"
+						android:text="Food Name :"
+						android:textColor="#FFFFFF" />
+
+					<TextView
+						android:id="@+id/foodName"
+						android:layout_width="110dp"
+						android:layout_height="20dp"
+						android:background="#32CD32"
+						android:text="Default"
+						android:textColor="#FFFFFF" />
+
+				</TableRow>
+			</HorizontalScrollView>
+			<TableRow
+				android:layout_width="match_parent"
+				android:layout_height="match_parent">
+
+				<TextView
+					android:id="@+id/labelQty"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="Quantity:"
+					android:textColor="#FFFFFF" />
+
+				<TextView
+					android:id="@+id/quantity"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="0"
+					android:textAlignment="textEnd"
+					android:textColor="#FFFFFF" />
+
+				<TextView
+					android:id="@+id/unit"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="unit"
+					android:textColor="#FFFFFF" />
+			</TableRow>
+			<TableRow
+				android:layout_width="match_parent"
+				android:layout_height="match_parent">
+
+				<TextView
+					android:id="@+id/labelMfDate"
+					android:layout_width="151dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="Manufactured Date:"
+					android:textColor="#FFFFFF"
+					android:textSize="12sp" />
+
+				<TextView
+					android:id="@+id/mfDate"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="0"
+					android:textAlignment="textEnd"
+					android:textColor="#FFFFFF" />
+			</TableRow>
+			<TableRow
+				android:layout_width="match_parent"
+				android:layout_height="match_parent">
+
+				<TextView
+					android:id="@+id/labelExpDate"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="Expiry Date:"
+					android:textColor="#FFFFFF"
+					android:textSize="14sp" />
+
+				<TextView
+					android:id="@+id/expDate"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="0"
+					android:textAlignment="textEnd"
+					android:textColor="#FFFFFF" />
+			</TableRow>
+			<TableRow
+				android:layout_width="match_parent"
+				android:layout_height="match_parent">
+
+				<Button
+					android:id="@+id/btnDates"
+					android:layout_width="18dp"
+					android:layout_height="40dp"
+					android:background="#FFEB3B"
+					android:text="View Dates"
+					android:textColor="#E91E63" />
+			</TableRow>
+		</TableLayout>
+	</ScrollView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

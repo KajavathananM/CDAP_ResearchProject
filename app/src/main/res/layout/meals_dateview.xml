@@ -1,0 +1,308 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFEB3B"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+	tools:context=".MainActivity">
+
+    
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="417dp"
+        android:layout_height="99dp"
+        android:background="#FF4500"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.003" />
+     <TextView
+        android:id="@+id/textView2"
+        android:layout_width="218dp"
+        android:layout_height="41dp"
+        android:text="SMKitchenTracker"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintHorizontal_bias="0.88"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.046" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="71dp"
+        android:layout_height="77dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.282"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.022"
+        app:srcCompat="@drawable/smk_logo" />
+
+	<ScrollView
+		android:id="@+id/scrollView2"
+		android:layout_width="378dp"
+		android:layout_height="329dp"
+		android:layout_marginStart="20dp"
+		android:layout_marginBottom="16dp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintVertical_bias="0.29000002">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
+
+			<Button
+				android:id="@+id/SF"
+				android:layout_width="149dp"
+				android:layout_height="29dp"
+				android:background="#32CD32"
+				android:text="Suggest Food"
+				android:textColor="#FFFFFF" />
+
+			<DatePicker
+				android:id="@+id/mealCalendar"
+				android:layout_width="wrap_content"
+				android:layout_height="450dp"
+				android:datePickerMode="calendar" />
+
+		</LinearLayout>
+	</ScrollView>
+
+	<View
+		android:id="@+id/Breakfast"
+		android:layout_width="383dp"
+		android:layout_height="96dp"
+		android:background="#32CD32"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintVertical_bias="0.636" />
+
+	<TextView
+		android:id="@+id/Blabel"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:text="Breakfast"
+		android:textColor="#FFFFFF"
+		android:textSize="16sp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.055"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintVertical_bias="0.586" />
+
+    <ScrollView
+		android:id="@+id/BItemScroller"
+		android:layout_width="371dp"
+		android:layout_height="44dp"
+		android:layout_marginStart="16dp"
+		android:layout_marginTop="32dp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.0"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintVertical_bias="0.643">
+
+		<TableLayout
+			android:id="@+id/BItemsDetail"
+			android:layout_width="fill_parent"
+			android:layout_height="10dp"></TableLayout>
+	</ScrollView>
+
+    <View
+		android:id="@+id/Lunch"
+		android:layout_width="383dp"
+		android:layout_height="94dp"
+		android:background="#32CD32"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintVertical_bias="0.8" />
+
+	<TextView
+		android:id="@+id/Llabel"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:text="Lunch"
+		android:textColor="#FFFFFF"
+		android:textSize="16sp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.065"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintVertical_bias="0.734" />
+
+	<ScrollView
+		android:id="@+id/LItemScroller"
+		android:layout_width="371dp"
+		android:layout_height="48dp"
+		android:layout_marginStart="16dp"
+		android:layout_marginTop="32dp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.0"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintVertical_bias="0.8">
+
+		<TableLayout
+			android:id="@+id/LItemsDetail"
+			android:layout_width="fill_parent"
+			android:layout_height="10dp"></TableLayout>
+	</ScrollView>
+
+	<View
+		android:id="@+id/Dinner"
+		android:layout_width="385dp"
+		android:layout_height="98dp"
+		android:layout_marginStart="16dp"
+		android:layout_marginEnd="14dp"
+		android:background="#32CD32"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintVertical_bias="0.974" />
+
+	<TextView
+		android:id="@+id/Dlabel"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:text="Dinner"
+		android:textColor="#FFFFFF"
+		android:textSize="16sp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.058"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintVertical_bias="0.879" />
+
+	<ScrollView
+		android:id="@+id/DItemScroller"
+		android:layout_width="372dp"
+		android:layout_height="37dp"
+		android:layout_marginTop="90dp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.487"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintVertical_bias="0.956">
+
+		<TableLayout
+			android:id="@+id/DItemsDetail"
+			android:layout_width="fill_parent"
+			android:layout_height="10dp"></TableLayout>
+	</ScrollView>
+
+	<Button
+		android:id="@+id/b1"
+		android:layout_width="78dp"
+		android:layout_height="34dp"
+		android:layout_marginTop="8dp"
+		android:background="#FFEB3B"
+		android:text="Add Food"
+		android:textSize="10sp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.927"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintVertical_bias="0.585" />
+
+    
+
+    <Button
+		android:id="@+id/b2"
+		android:layout_width="78dp"
+		android:layout_height="34dp"
+		android:layout_marginTop="8dp"
+		android:background="#FFEB3B"
+		android:text="Add Food"
+		android:textSize="10sp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.945"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintVertical_bias="0.74" />
+
+	<Button
+		android:id="@+id/b3"
+		android:layout_width="78dp"
+		android:layout_height="34dp"
+		android:layout_marginTop="24dp"
+		android:background="#FFEB3B"
+		android:text="Add Food"
+		android:textSize="10sp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.951"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintVertical_bias="0.891" />
+
+	<Button
+		android:id="@+id/ov1"
+		android:layout_width="118dp"
+		android:layout_height="27dp"
+		android:layout_marginTop="500dp"
+		android:background="#FFEB3B"
+		android:text="Overall Nutrition"
+		android:textSize="10sp"
+		app:layout_constraintBottom_toTopOf="@+id/Breakfast"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.624"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+	<Button
+		android:id="@+id/ov2"
+		android:layout_width="118dp"
+		android:layout_height="27dp"
+		android:layout_marginStart="90dp"
+		android:layout_marginBottom="230dp"
+		android:background="#FFEB3B"
+		android:text="Overall Nutrition"
+		android:textSize="10sp"
+		app:layout_constraintBottom_toTopOf="@+id/DItemScroller"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/Lunch" />
+
+	<Button
+		android:id="@+id/ov3"
+		android:layout_width="118dp"
+		android:layout_height="27dp"
+		android:layout_marginTop="8dp"
+		android:background="#FFEB3B"
+		android:text="Overall Nutrition"
+		android:textSize="10sp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.651"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintVertical_bias="0.895" />
+</androidx.constraintlayout.widget.ConstraintLayout>

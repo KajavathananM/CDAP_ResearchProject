@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:descendantFocusability="beforeDescendants"
+	android:paddingLeft="15dp"
+	android:paddingRight="15dp">
+
+	<View
+		android:id="@+id/breakfast"
+		android:layout_width="384dp"
+		android:layout_height="55dp"
+		android:background="#32CD32"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+
+	<ScrollView
+		android:id="@+id/itemScroller"
+		android:layout_width="371dp"
+		android:layout_height="44dp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.8"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintVertical_bias="0.3">
+
+		<TableLayout
+			android:id="@+id/itemsDetail"
+			android:layout_width="fill_parent"
+			android:layout_height="10dp">
+
+			<TableRow
+				android:layout_width="match_parent"
+				android:layout_height="match_parent">
+
+				<TextView
+					android:id="@+id/labelMfDate"
+					android:layout_width="211dp"
+					android:layout_height="19dp"
+					android:layout_weight="1"
+					android:text="      Manufactured Date:"
+					android:textColor="#FFFFFF"
+					android:textSize="10sp" />
+
+				<TextView
+					android:id="@+id/mfDate"
+					android:layout_width="82dp"
+					android:layout_height="wrap_content"
+					android:text="0"
+					android:textAlignment="textStart"
+					android:textColor="#FFFFFF" />
+			</TableRow>
+
+			<TableRow
+				android:layout_width="match_parent"
+				android:layout_height="match_parent">
+
+				<TextView
+					android:id="@+id/labelExpDate"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="      Expiry Date:"
+					android:textColor="#FFFFFF"
+					android:textSize="10sp" />
+
+				<TextView
+					android:id="@+id/expDate"
+					android:layout_width="245dp"
+					android:layout_height="wrap_content"
+					android:text="0"
+					android:textAlignment="textStart"
+					android:textColor="#FFFFFF" />
+			</TableRow>
+		</TableLayout>
+	</ScrollView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
