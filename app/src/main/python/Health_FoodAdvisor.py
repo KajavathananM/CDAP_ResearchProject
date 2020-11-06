@@ -158,8 +158,15 @@ for label in RecipeLabels:
             engine2.run() 
             #break
 
-
+'''
 print("==============================================================================\n")
 print("Recommended Foods: "+ str(recommendList))
 print("Avoided Foods: "+ str(avoidanceList))
 print("================================================================================")
+'''
+list1="Recommended Foods: "+ str(recommendList)
+list2="Avoided Foods: "+ str(avoidanceList)
+
+#Here we are returning two type of food List:Recommended foods to be eaten and high risk foods to be avoided
+def returnList():
+   return list1,list2
