@@ -5,7 +5,8 @@ from pyknow import *
 import sys
 import pandas as pd
 import numpy as np
-
+from os.path import dirname, join,abspath
+from pathlib import Path
 
 predictedLabels=["Apple","Banana","French Fries","Idly","Pizza","Rice with Dhal","Samosa"]
 RecipeLabels=["Pizza","Idly","French Fries","Rice with Dhal"]
@@ -26,7 +27,7 @@ class RecipeData(Fact):
     """Info about the Patient's health Details"""
     pass
 
-
+#This Rule Engine suggests Food checks person's cholestrol level and diabetic level in blood either normal,low or high and compare with carbohydrate and Fat intake
 class SuggestFoodEngine(KnowledgeEngine): 
     @Rule(
         NutrientsData(FoodName=MATCH.FoodName,carbVal=MATCH.carbVal),
@@ -86,7 +87,9 @@ engine1.reset()
 #2) Perform comparison between two datas and check defficiency in Nutrient                              
 for predictedLabel in predictedLabels:
   # Read Nutrition Composition for each food item
-  nutritionData=pd.read_csv('D:\\NutritionImageClassifierCDAP\\nutrition_dataset\\'+predictedLabel+'.csv')
+  nutrientcsvFile=predictedLabel+'.csv'
+  nDatasetPath=join(dirname(__file__),nutrientcsvFile)
+  nutritionData=pd.read_csv(nDatasetPath)
   carb= nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Carbohydrate"].index,1].squeeze()
   fat= nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Fat"].index,1].squeeze()
   protein = nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Protein"].index,1].squeeze()
@@ -114,10 +117,12 @@ for predictedLabel in predictedLabels:
   engine1.run() 
   
 
-#Read ingredients from Food Item's dataset
-iList=pd.read_csv('D:\\NutritionImageClassifierCDAP\\nutrition_dataset\\Ingredients.csv', usecols=RecipeLabels)
+#Read ingredient names from Food Item's dataset
+ingredientscsvFile='Ingredients.csv'
+iListDatasetPath=join(dirname(__file__),ingredientscsvFile)
+iList=pd.read_csv(iListDatasetPath, usecols=RecipeLabels)
+#This Rule Engine checks if there is an allergic ingredient in food and if the person is allergic
 class AllergyEngine(KnowledgeEngine):
-    #Check if there is an allergic ingredient in food and if the person is allergic
     @Rule(RecipeData(FoodName=MATCH.FoodName,ingredient=MATCH.ingredient),
           PatientData(allergyToCheese=MATCH.allergyToCheese),
           OR(
@@ -158,15 +163,15 @@ for label in RecipeLabels:
             engine2.run() 
             #break
 
-'''
-print("==============================================================================\n")
-print("Recommended Foods: "+ str(recommendList))
-print("Avoided Foods: "+ str(avoidanceList))
-print("================================================================================")
-'''
+
+#print("==============================================================================\n")
+#print("Recommended Foods: "+ str(recommendList))
+#print("Avoided Foods: "+ str(avoidanceList))
+#print("================================================================================")
+
 list1="Recommended Foods: "+ str(recommendList)
 list2="Avoided Foods: "+ str(avoidanceList)
 
-#Here we are returning two type of food List:Recommended foods to be eaten and high risk foods to be avoided
+#Here we are returning two type of food List:Recommended foods to be eaten and foods to be avoided
 def returnList():
    return list1,list2
