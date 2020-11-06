@@ -24,10 +24,10 @@ class PatientData(Fact):
     """Info about the Patient's health Details"""
     pass
 class RecipeData(Fact):
-    """Info about the Patient's health Details"""
+    """Info about the Ingredients in the recipe""
     pass
 
-#This Rule Engine suggests Food by checking person's cholestrol level and diabetic level in blood either normal,low or high and compare with carbohydrate and Fat intake
+#This Rule Engine suggests Food by checking person's cholestrol level and diabetic level in blood either normal,low or high scenarios and compare with carbohydrate and Fat intake in blood
 class SuggestFoodEngine(KnowledgeEngine): 
     @Rule(
         NutrientsData(FoodName=MATCH.FoodName,carbVal=MATCH.carbVal),
@@ -163,14 +163,11 @@ for label in RecipeLabels:
             engine2.run() 
             #break
 
-
-#print("==============================================================================\n")
-#print("Recommended Foods: "+ str(recommendList))
-#print("Avoided Foods: "+ str(avoidanceList))
-#print("================================================================================")
-
 list1="Recommended Foods: "+ str(recommendList)
 list2="Avoided Foods: "+ str(avoidanceList)
+
+# print(list1)
+# print(list2)
 
 #Here we are returning two type of food List:Recommended foods to be eaten and foods to be avoided
 def returnList():
