@@ -27,7 +27,7 @@ class RecipeData(Fact):
     """Info about the Patient's health Details"""
     pass
 
-#This Rule Engine suggests Food checks person's cholestrol level and diabetic level in blood either normal,low or high and compare with carbohydrate and Fat intake
+#This Rule Engine suggests Food by checking person's cholestrol level and diabetic level in blood either normal,low or high and compare with carbohydrate and Fat intake
 class SuggestFoodEngine(KnowledgeEngine): 
     @Rule(
         NutrientsData(FoodName=MATCH.FoodName,carbVal=MATCH.carbVal),
