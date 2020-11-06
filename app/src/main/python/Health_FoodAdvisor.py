@@ -24,9 +24,10 @@ class PatientData(Fact):
     """Info about the Patient's health Details"""
     pass
 class RecipeData(Fact):
-    """Info about the Ingredients in the recipe""
+    """Info about the Ingredients in the recipe"""
     pass
-""
+
+"""
 This Rule Engine suggests Food by checking person's
 cholestrol level and diabetic level in blood either normal,low 
 or high scenarios and compare with carbohydrate and Fat intake in blood
