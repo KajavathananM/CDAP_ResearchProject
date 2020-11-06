@@ -5,7 +5,8 @@ from pyknow import *
 import sys
 import pandas as pd
 import numpy as np
-
+from os.path import dirname, join,abspath
+from pathlib import Path
 
 predictedLabels=["Apple","Banana","French Fries","Idly","Pizza","Rice with Dhal","Samosa"]
 RecipeLabels=["Pizza","Idly","French Fries","Rice with Dhal"]
@@ -105,7 +106,9 @@ engine1.reset()
 #2) Perform comparison between two datas and check defficiency in Nutrient                              
 for predictedLabel in predictedLabels:
   # Read Nutrition Composition for each food item
-  nutritionData=pd.read_csv('D:\\NutritionImageClassifierCDAP\\nutrition_dataset\\'+predictedLabel+'.csv')
+  nutrientcsvFile=predictedLabel+'.csv'
+  nDatasetPath=join(dirname(__file__),nutrientcsvFile)
+  nutritionData=pd.read_csv(nDatasetPath)
   carb= nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Carbohydrate"].index,1].squeeze()
   fat= nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Fat"].index,1].squeeze()
   protein = nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Protein"].index,1].squeeze()
@@ -142,7 +145,9 @@ for predictedLabel in predictedLabels:
   
 
 #Read ingredients from Food Item's dataset
-iList=pd.read_csv('D:\\NutritionImageClassifierCDAP\\nutrition_dataset\\Ingredients.csv', usecols=RecipeLabels)
+ingredientscsvFile='Ingredients.csv'
+iListDatasetPath=join(dirname(__file__),ingredientscsvFile)
+iList=pd.read_csv(iListDatasetPath, usecols=RecipeLabels)
 
 #This Rule Engine checks if there is an allergic ingredient in food and if the person is allergic to it
 class AllergyEngine(KnowledgeEngine):
