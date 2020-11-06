@@ -198,8 +198,8 @@ for label in RecipeLabels:
 list1="Recommended Foods: "+ str(recommendList)
 list2="Avoided Foods: "+ str(avoidanceList)
 
-print(list1)
-print(list2)
+#print(list1)
+#print(list2)
 
 #Here we are returning two type of food List:Recommended foods to be eaten and  foods to be avoided if they are risk to our health
 def returnList():
