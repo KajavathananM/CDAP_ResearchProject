@@ -26,8 +26,11 @@ class PatientData(Fact):
 class RecipeData(Fact):
     """Info about the Ingredients in the recipe""
     pass
-
-#This Rule Engine suggests Food by checking person's cholestrol level and diabetic level in blood either normal,low or high scenarios and compare with carbohydrate and Fat intake in blood
+""
+This Rule Engine suggests Food by checking person's
+cholestrol level and diabetic level in blood either normal,low 
+or high scenarios and compare with carbohydrate and Fat intake in blood
+"""
 class SuggestFoodEngine(KnowledgeEngine): 
     @Rule(
         NutrientsData(FoodName=MATCH.FoodName,carbVal=MATCH.carbVal),
@@ -121,7 +124,8 @@ for predictedLabel in predictedLabels:
 ingredientscsvFile='Ingredients.csv'
 iListDatasetPath=join(dirname(__file__),ingredientscsvFile)
 iList=pd.read_csv(iListDatasetPath, usecols=RecipeLabels)
-#This Rule Engine checks if there is an allergic ingredient in food and if the person is allergic
+
+#This Rule Engine checks if there is an allergic ingredient in food and if the person is allergic to it
 class AllergyEngine(KnowledgeEngine):
     @Rule(RecipeData(FoodName=MATCH.FoodName,ingredient=MATCH.ingredient),
           PatientData(allergyToCheese=MATCH.allergyToCheese),
