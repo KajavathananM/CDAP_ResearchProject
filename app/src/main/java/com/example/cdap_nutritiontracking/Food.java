@@ -28,8 +28,9 @@ public class Food implements Serializable {
     private int foodQuantity;
     private ArrayList<Dates> dates;
     private String expDate;
-
-     public Food(String foodName,int foodQuantity){
+    
+    private String[] reasons;
+    public Food(String foodName,int foodQuantity){
         this.foodName = foodName;
         this.foodQuantity=foodQuantity;
     }
@@ -53,7 +54,10 @@ public class Food implements Serializable {
         this.foodQuantity=foodQuantity;
         this.dates=dates;
     }
-    
+    public Food(String foodName,String[] reasons){
+        this.foodName=foodName;
+        this.reasons=reasons;
+    }
     //Common Properties
     public String getFoodName() {
         return foodName;
@@ -72,5 +76,8 @@ public class Food implements Serializable {
     }
     public String getExpDate(){
         return expDate;
+    }
+    public String[]  getReasons(){
+        return reasons;
     }
 }

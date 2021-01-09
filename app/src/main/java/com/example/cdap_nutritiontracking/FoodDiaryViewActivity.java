@@ -8,11 +8,16 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -44,6 +49,8 @@ public class FoodDiaryViewActivity extends AppCompatActivity {
     TableLayout LItemsDetail;
     TableLayout DItemsDetail;
 
+
+    Button tab;
     final Context context = this;
     
     DatePicker  mealCalendar;
@@ -53,6 +60,9 @@ public class FoodDiaryViewActivity extends AppCompatActivity {
     public ArrayList<Meal> breakfastList=new ArrayList<Meal>();
     public ArrayList<Meal> lunchList=new ArrayList<Meal>();
     public ArrayList<Meal> dinnerList=new ArrayList<Meal>();
+
+    public ArrayList<Boolean> isClickedList=new ArrayList<Boolean>();
+
 
     Meal meal;
     TableRow row;
@@ -97,35 +107,55 @@ public class FoodDiaryViewActivity extends AppCompatActivity {
         sf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               if (! Python.isStarted()) {
-                   Python.start(new AndroidPlatform(context));
-               }
-               python = Python.getInstance();
-               pythonFile = python.getModule("Health_FoodAdvisor");
-               List<PyObject> foodList=(pythonFile.callAttr("returnList")).asList();
-               String list1=String.valueOf(foodList.get(0));
-               String list2=String.valueOf(foodList.get(1));  
-			   final Dialog dialog = new Dialog(context);
-			   dialog.setContentView(R.layout.activity_healthfoodadvisor);
-			   dialog.setTitle("Food Suggestor Dialog");   
-			   final TextView title = (TextView) dialog.findViewById(R.id.title);
-               final TextView recommendFoods = (TextView) dialog.findViewById(R.id.rFoods);
-               final TextView avoidFoods = (TextView) dialog.findViewById(R.id.avoidFoods);
-
-                title.setText("Health Suggestion of Food Items to take for your meals");
-                title.setTextSize(16);
-                title.setTypeface(null, Typeface.BOLD);
-
-                recommendFoods.setText(list1);
-                avoidFoods.setText(list2);
+                final Dialog dialog = new Dialog(context);
+                dialog.setContentView(R.layout.activity_healthfoodadvisor);
+                dialog.setTitle("Food Suggestor Dialog");   
+                final TextView title = (TextView) dialog.findViewById(R.id.title3);
+                final TextView recommendFoods = (TextView) dialog.findViewById(R.id.rFoods);
+                final TextView avoidFoods = (TextView) dialog.findViewById(R.id.avoidFoods);
                 Button close = (Button) dialog.findViewById(R.id.close);
+                title.setText("Loading......");
+                
                 close.setOnClickListener(new View.OnClickListener() {
 				            @Override
 				            public void onClick(View v) {
 					            dialog.dismiss();
 				            }
-			          });
+                });
                 dialog.show();
+
+                
+               if (! Python.isStarted()) {
+                   Python.start(new AndroidPlatform(context));
+               }
+               new Handler().postDelayed(new Runnable(){
+               @Override
+               public void run() {
+                    python = Python.getInstance();
+                    pythonFile = python.getModule("Health_FoodAdvisor");
+                    List<PyObject> foodList=(pythonFile.callAttr("returnList")).asList();
+                    String recFoods=String.valueOf(foodList.get(0));
+                    String avFoods=String.valueOf(foodList.get(1));  
+                    String avoidReasons=String.valueOf(foodList.get(2)); 
+                    final MapService mpService=new MapService();
+                    mpService.MapAvoidedFoods(avFoods,avoidReasons);
+                    Log.d("List3FoodName",String.valueOf(mpService.getAvoidedList().get(0).getFoodName()));
+                    // String[]val=mpService.getAvoidedList().get(2).getReasons();
+                    // Log.d("ArrSize: ",String.valueOf(val.length));
+                    final ArrayList<Food> avoidList=mpService.getAvoidedList();
+                    
+                    SpannableString heading = new SpannableString("Healthy Suggestion of Food Items to take for your meals");
+                    heading.setSpan(new UnderlineSpan(), 0, heading.length(), 0);
+                    title.setText(heading);
+                    title.setTextSize(16);
+                    title.setTypeface(null, Typeface.BOLD);
+                    recommendFoods.setText("Recommended Foods: "+recFoods);
+                    recommendFoods.setTypeface(null, Typeface.BOLD);
+                    recommendFoods.setTextSize(15);
+                    avoidFoods.setText("Avoid these Foods:");
+                    makeAvoidTabs(dialog,avoidList);
+                 }
+              },60); 
             }
           
         });
@@ -375,6 +405,55 @@ public class FoodDiaryViewActivity extends AppCompatActivity {
             table.removeViewAt(i);
         }        
       }
+    }
+    public void makeAvoidTabs(Dialog dialog, final ArrayList<Food> avoidList){
+        LinearLayout tabs = (LinearLayout)dialog.findViewById(R.id.linearLayout2);
+        final TableLayout reasonTable = (TableLayout)dialog.findViewById(R.id.tableLayout2);
+        for(final Food avoidFood:avoidList)
+        {
+            
+            final Button tab=new Button(context);
+            final int index=avoidList.indexOf(avoidFood);
+            tab.setId(index);
+            tab.setText(avoidFood.getFoodName());
+            tab.setTextSize(12);
+            tab.setTextColor(Color.parseColor("#FFFFFF"));
+            tab.setBackgroundColor(Color.parseColor("#32CD32"));
+
+            isClickedList.add(false);
+            tab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int i=0;
+                    if(isClickedList.get(avoidList.indexOf(avoidFood)) ==true){
+                        isClickedList.set(avoidList.indexOf(avoidFood), false);
+                        tab.setTextColor(Color.parseColor("#FFFFFF"));
+                        tab.setBackgroundColor(Color.parseColor("#32CD32"));
+                        clearTable(null,reasonTable);
+                    }else if(isClickedList.get(avoidList.indexOf(avoidFood)) ==false){
+                        isClickedList.set(avoidList.indexOf(avoidFood), true);
+                        tab.setTextColor(Color.parseColor("#000000"));
+                        tab.setBackgroundColor(Color.parseColor("#DCDCDC"));
+                        String reasons[]=avoidList.get(index).getReasons();
+                        for(String reason:reasons){
+                            i++;
+                            TableRow row=new TableRow(context);
+                            TextView reasonDisplay=new TextView(context);
+                            reasonDisplay.setTextSize(16);
+                            reasonDisplay.setText(String.valueOf(i)+") "+reason);
+                            row.addView(reasonDisplay);
+                            reasonTable.addView(row);
+                        }
+                    }     
+                   
+                }
+            });
+            TextView textView = new TextView(context);
+            textView.setText(" ");
+            tabs.addView(tab);
+            tabs.addView(textView);
+        }
+
     }
        
 }

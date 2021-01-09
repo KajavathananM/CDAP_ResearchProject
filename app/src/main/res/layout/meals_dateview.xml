@@ -10,18 +10,18 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
 	tools:context=".MainActivity">
 
-    
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="417dp"
-        android:layout_height="99dp"
-        android:background="#FF4500"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.003" />
-     <TextView
+	<View
+		android:id="@+id/view"
+		android:layout_width="417dp"
+		android:layout_height="99dp"
+		android:background="#FF4500"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintVertical_bias="0.003" />
+
+	<TextView
         android:id="@+id/textView2"
         android:layout_width="218dp"
         android:layout_height="41dp"
@@ -47,40 +47,40 @@
         app:layout_constraintVertical_bias="0.022"
         app:srcCompat="@drawable/smk_logo" />
 
-	<ScrollView
-		android:id="@+id/scrollView2"
-		android:layout_width="378dp"
-		android:layout_height="329dp"
-		android:layout_marginStart="20dp"
-		android:layout_marginBottom="16dp"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintVertical_bias="0.29000002">
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="378dp"
+        android:layout_height="329dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3">
 
-		<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
 			<Button
 				android:id="@+id/SF"
 				android:layout_width="149dp"
-				android:layout_height="29dp"
+				android:layout_height="30dp"
 				android:background="#32CD32"
 				android:text="Suggest Food"
 				android:textColor="#FFFFFF" />
 
-			<DatePicker
-				android:id="@+id/mealCalendar"
-				android:layout_width="wrap_content"
-				android:layout_height="450dp"
-				android:datePickerMode="calendar" />
+            <DatePicker
+                android:id="@+id/mealCalendar"
+                android:layout_width="wrap_content"
+                android:layout_height="450dp"
+                android:datePickerMode="calendar" />
 
-		</LinearLayout>
-	</ScrollView>
+        </LinearLayout>
+    </ScrollView>
 
-	<View
+    <View
 		android:id="@+id/Breakfast"
 		android:layout_width="383dp"
 		android:layout_height="96dp"

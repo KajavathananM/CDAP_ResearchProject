@@ -43,8 +43,8 @@
         app:srcCompat="@drawable/smk_logo" />
 
     <HorizontalScrollView
-        android:layout_width="414dp"
-        android:layout_height="725dp"
+        android:layout_width="846dp"
+        android:layout_height="744dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

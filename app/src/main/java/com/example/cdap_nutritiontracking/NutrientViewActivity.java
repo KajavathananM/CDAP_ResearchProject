@@ -30,6 +30,7 @@ public class NutrientViewActivity extends AppCompatActivity {
 
     byte[] byteArray;
     Meal meal;
+    Meal mealTemp;
 
     byte[] imageData1;
     byte[] imageData2;
@@ -41,12 +42,14 @@ public class NutrientViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        
+        predictedLabel="Unknown";
         fdService=new FoodDiaryService(NutrientViewActivity.this);
         Intent i = getIntent();
         byteArray = i.getByteArrayExtra("byteArray");
         if(i.getExtras() != null) {
             meal = (Meal) i.getSerializableExtra("meal");
+            mealTemp=meal;
          }
 
         final Toast toast=Toast.makeText(getApplicationContext(), "Invalid Object, Please Try Again!",Toast.LENGTH_LONG);
@@ -72,7 +75,7 @@ public class NutrientViewActivity extends AppCompatActivity {
                    mineralsView=findViewById(R.id.mineralsView);
 
                    
-                   try{
+                   if(!predictedLabel.equals("Unknown")){
                        foodName.setText(predictedLabel);
                        calorieValue.setText(getCalorieValue(predictedLabel));
                        caloriesView.setImageBitmap(getCalorieBitmap(predictedLabel));
@@ -90,10 +93,11 @@ public class NutrientViewActivity extends AppCompatActivity {
                             public void onClick(View view) {
                                 Intent i=new Intent(NutrientViewActivity.this,FoodDiaryViewActivity.class);
                                 startActivity(i);
+                                predictedLabel="Unknown";
                                 NutrientViewActivity.this.finish();
                             }
                        });
-                    }catch(Exception e)
+                    }else if(predictedLabel.equals("Unknown"))
                     {
                         foodName.setText("");
                         calorieValue.setText("");
@@ -103,6 +107,7 @@ public class NutrientViewActivity extends AppCompatActivity {
 
                         
                         Intent returnCameraView=new Intent(NutrientViewActivity.this,CameraViewActivity.class);
+                        returnCameraView.putExtra("meal",(Meal)mealTemp);
                         startActivity(returnCameraView);
                         NutrientViewActivity.this.finish();
                         toast.show();
@@ -111,7 +116,7 @@ public class NutrientViewActivity extends AppCompatActivity {
                    
                   
             }
-        },250);     
+        },70);     
 
     }
     //This returns accurate predicted Label  according to Food Image
