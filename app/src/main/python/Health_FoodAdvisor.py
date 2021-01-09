@@ -13,7 +13,7 @@ RecipeLabels=["Pizza","Idly","French Fries","Rice with Dhal"]
 
 recommendList=[]
 avoidanceList=[]
-
+avoidReasons=[]
 
 
 
@@ -27,82 +27,87 @@ class RecipeData(Fact):
     """Info about the Patient's health Details"""
     pass
 
-
+"""
+This Rule Engine suggests Food by checking person's
+cholestrol level and diabetic level in blood is either normal,low 
+or high scenarios and compare with carbohydrate and Fat intake in blood
+"""
 class SuggestFoodEngine(KnowledgeEngine):
-   
-    #Suggest Food items below diabetic level or cholestrol level of a person
-    @Rule(NutrientsData(Carbohydrate=MATCH.Carbohydrate,FoodName=MATCH.FoodName,Fat=MATCH.Fat),
-          PatientData(sugar_lvl=MATCH.sugar_lvl,cholestrol_lvl=MATCH.cholestrol_lvl),
+   # Check if diabetic range is below normal level,recommend all Carbohydrate enriched foods
+    @Rule(
+            AND(
+                NutrientsData(FoodName=MATCH.FoodName),
+                PatientData(raise_blood_sugar=MATCH.raise_blood_sugar,allowed_range_sugar=MATCH.allowed_range_sugar),
+                PatientData(ent_sugarLvl=P(lambda ent_sugarLvl:ent_sugarLvl>70) & P(lambda ent_sugarLvl:ent_sugarLvl<140))
+            )
+           
+    )
+    def CheckIfPersonInNormalDiabeticRange(self,FoodName,allowed_range_sugar,raise_blood_sugar):
+     #   print("Carbohydate level is low,therefore "+FoodName+ " is suggested.")
+       recommendList.append(FoodName)
+       
+    # Check if diabetic range is above normal and avoid those foods.
+    @Rule(
+            NutrientsData(FoodName=MATCH.FoodName),
+            PatientData(ent_sugarLvl=P(lambda ent_sugarLvl:ent_sugarLvl>=140)& P(lambda ent_sugarLvl:ent_sugarLvl<200))
+    )
+    def CheckifJustAboveDiabeticRangeFalse(self,FoodName,allowed_range_sugar,raise_blood_sugar):
+               if(allowed_range_sugar<raise_blood_sugar):
+                 if(FoodName not in recommendList):
+                    #  print(FoodName+" is within diabetic range.")
+                     recommendList.append(FoodName)
+
+    # Check if diabetic range is above normal and avoid carbohydrate food that exceeds your diabetic range
+    @Rule(
+            NutrientsData(FoodName=MATCH.FoodName),
+            PatientData(ent_sugarLvl=P(lambda ent_sugarLvl:ent_sugarLvl>=140)& P(lambda ent_sugarLvl:ent_sugarLvl<200))
+    )
+    def CheckifJustAboveDiabeticRangeTrue(self,FoodName,allowed_range_sugar,raise_blood_sugar):
+               if(allowed_range_sugar>raise_blood_sugar):
+                  avoidReasons.append(FoodName+" exceeds diabetic range.")
+                  avoidanceList.append(FoodName)
+    
+    # Check if cholestrol range is in  normal range
+    @Rule(
+       OR(
+           AND(
+            NutrientsData(FoodName=MATCH.FoodName,fatVal=MATCH.fatVal),
+            NutrientsData(fatVal=P(lambda fatVal:fatVal>=12) & P(lambda fatVal:fatVal<=15)),
+            PatientData(ent_cholestrolLvl=P(lambda ent_cholestrolLvl:ent_cholestrolLvl>200) & P(lambda ent_cholestrolLvl:ent_cholestrolLvl<230))
+          ),
           AND(
-                    TEST( lambda sugar_lvl, Carbohydrate: Carbohydrate<=sugar_lvl),
-                    TEST( lambda cholestrol_lvl, Fat: Fat<=cholestrol_lvl)
+            NutrientsData(FoodName=MATCH.FoodName,fatVal=MATCH.fatVal),
+            NutrientsData(fatVal=P(lambda fatVal:fatVal>=12) & P(lambda fatVal:fatVal<=15)),
+            PatientData(ent_cholestrolLvl=P(lambda ent_cholestrolLvl:ent_cholestrolLvl<=200))
           )
+       )
     )
-    def SuggestLowCholestrolOrDiabetesFoods(self,FoodName):
-           #print(FoodName+" is suggested since it is less risky for cholestrol.\n")
-           if(FoodName not in recommendList):
-                recommendList.append(FoodName) 
+    def CheckIfPersonInNormalCholestrolRange(self,FoodName):
+        
+        if(FoodName not in recommendList and FoodName not in avoidanceList):
+          #     print("Cholestrol level is low,therefore "+FoodName+ " is suggested.")
+              recommendList.append(FoodName) 
+    # Check if cholestrol range is above normal and avoid foods that is not within cholestrol range.
+    @Rule( 
+       AND(
+            AND(
+                 NutrientsData(FoodName=MATCH.FoodName,fatVal=MATCH.fatVal),
+                 NutrientsData(fatVal=P(lambda fatVal:fatVal>14))
+            ),
+            PatientData(ent_cholestrolLvl=P(lambda ent_cholestrolLvl:ent_cholestrolLvl>=230))
+       )
+    )
+    def AvoidHighCholestrolFoods(self,FoodName):
+            if(FoodName in recommendList):
+              avoidReasons.append(FoodName+" is not within cholestrol range.")
+              recommendList.remove(FoodName) 
+            avoidanceList.append(FoodName)
+ 
+   
 
-    #Avoid food items that exceed cholestrol level or diabetic level of a person
-    @Rule(NutrientsData(Carbohydrate=MATCH.Carbohydrate,FoodName=MATCH.FoodName,Fat=MATCH.Fat),
-          PatientData(sugar_lvl=MATCH.sugar_lvl,cholestrol_lvl=MATCH.cholestrol_lvl),
-          OR(
-               AND(
-                    TEST( lambda sugar_lvl, Carbohydrate:Carbohydrate>sugar_lvl),
-                    TEST( lambda cholestrol_lvl,Fat:Fat>cholestrol_lvl)  
-               ),
-               AND(
-                    TEST( lambda sugar_lvl, Carbohydrate:Carbohydrate<=sugar_lvl),
-                    TEST( lambda cholestrol_lvl,Fat:Fat>cholestrol_lvl)  
-               ),
-                AND(
-                    TEST( lambda sugar_lvl, Carbohydrate:Carbohydrate>sugar_lvl),
-                    TEST( lambda cholestrol_lvl,Fat:Fat<=cholestrol_lvl)  
-               )
-          )
-    )
-    def AvoidHighCholestrolOrDiabetesFoods(self,FoodName):
-        #print("Please avoid "+FoodName+" that leads to cholestrol or diabetes.\n")
-       if(FoodName in recommendList):
-          recommendList.remove(FoodName)
-       if(FoodName not in avoidanceList):
-          avoidanceList.append(FoodName)
     
-  
-    #Trigger Liver disease alert vased on comparing user's Iron storage and Iron of food item
-    @Rule(NutrientsData(Iron=MATCH.Iron,FoodName=MATCH.FoodName),
-         PatientData(IronIntake=MATCH.IronIntake),
-         TEST(lambda Iron, IronIntake: Iron>IronIntake)
-    )
-    def AvoidExcessIronFoods(self,FoodName):
-         #print("Please avoid "+FoodName +" to prevent liver disease.\n")
-         if(FoodName in recommendList):
-           if(FoodName not in avoidanceList):
-               recommendList.remove(FoodName)
-               avoidanceList.append(FoodName) 
-         if(FoodName not in avoidanceList):
-              avoidanceList.append(FoodName)  
-    
-     
-    #Suggest Protien rich food that is suitable for protein deficient
-    @Rule(NutrientsData(Protein=MATCH.Protein,FoodName=MATCH.FoodName),
-         PatientData(proteinDeficent=MATCH.proteinDeficent),
-         AND(
-            TEST(lambda proteinDeficent, proteinDeficient:True), 
-            TEST(lambda Protein, P:Protein==2.69)    
-         )
-    )
-    def SuggestProteinRichFoods(self,FoodName):
-         #print(FoodName +" is suggested to you to gain protein.\n")
-         if(FoodName  not in recommendList):
-           if(FoodName  not in avoidanceList):
-               recommendList.append(FoodName)
-         if(FoodName not in avoidanceList):
-              avoidanceList.append(FoodName)  
-
-engine = SuggestFoodEngine()
-engine.reset()
-
+engine1 = SuggestFoodEngine()
+engine1.reset()
 #1) Retrieving Nutrition Data nad Human's user data
 #2) Perform comparison between two datas and check defficiency in Nutrient                              
 for predictedLabel in predictedLabels:
@@ -110,73 +115,77 @@ for predictedLabel in predictedLabels:
   nutrientcsvFile=predictedLabel+'.csv'
   nDatasetPath=join(dirname(__file__),nutrientcsvFile)
   nutritionData=pd.read_csv(nDatasetPath)
-  c= nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Carbohydrate"].index,1].squeeze()
-  f= nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Fat"].index,1].squeeze()
-  p = nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Protein"].index,1].squeeze()
-  vitA = nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Vitamin A"].index,1].squeeze()/((10**6)*3.33)
-  vitB6 = nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Vitamin B6"].index,1].squeeze()/(10**3)
-  vitB12 = nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Vitamin B12"].index,1].squeeze()/((10**6)*3.33)
-  vitC = nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Vitamin C"].index,1].squeeze()/(10**3)
-  vitD=nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Vitamin D"].index,1].squeeze()/((10**6)*3.33)
-  vitE=nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Vitamin E"].index,1].squeeze()/(10**3)
-  vitK=nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Vitamin K"].index,1].squeeze()/((10**6)*3.33)
-  fluoride = nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Fluoride, F"].index,1].squeeze()/(10**6)
-  calcium = nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Calcium, Ca"].index,1].squeeze()/(10**3)
-  sodium = nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Sodium, Na"].index,1].squeeze()/(10**3)
-  potassium = nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Potassium, K"].index,1].squeeze()/(10**3)
-  iron=nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Iron, Fe"].index,1].squeeze()/(10**3)
-  phosphorus=nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Phosphorus, P"].index,1].squeeze()/(10**3)
-  magnesium=nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Magnesium, Mg"].index,1].squeeze()/(10**3)
-  zinc=nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Zinc, Zn"].index,1].squeeze()/(10**3)
+  carb= nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Carbohydrate"].index,1].squeeze()
+  fat= nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Fat"].index,1].squeeze()
+  protein = nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Protein"].index,1].squeeze()
+  
   
   #Value of User's Patient Details
-  cholestrolLvl=20
-  sugarLvl=20
-  IronAMT=5/(10**3)
+  ent_sugarLvl=110
+  CarbValue= (carb/100) * 175
+  raise_blood_sugar = CarbValue * 3.5
+  allowed_range_sugar = 200 - ent_sugarLvl
+  #print("Raised Blood Sugar: "+str(raise_blood_sugar))
+  #print("Allowed Range Sugar: "+str(allowed_range_sugar))
   
+  #FatValue= (fat/100) * 175
+  #print("Carb Value for "+predictedLabel+": "+str(CarbValue))
+  #print("Fat Value for "+predictedLabel+": "+str(fat))
+  ent_cholestrolLvl=280
 
-  engine.declare(NutrientsData(
+ 
+  engine1.declare(NutrientsData(
                           FoodName=predictedLabel,
-                          Carbohydrate=c,
-                          Fat=f,
-                          Iron=iron,
-                          Protein=p
+                          fatVal=fat,
+                          carbVals=CarbValue
                 ),
                 PatientData(
-                           cholestrol_lvl=cholestrolLvl,
-                           sugar_lvl=sugarLvl,
-                           IronIntake=IronAMT,
-                           proteinDeficent=True
+                           ent_sugarLvl=ent_sugarLvl,
+                           raise_blood_sugar=raise_blood_sugar,
+                           allowed_range_sugar=allowed_range_sugar,
+                           ent_cholestrolLvl=ent_cholestrolLvl
                 )
   )      
-  engine.run() 
+  engine1.run() 
+  engine1.reset()
   
 
 #Read ingredients from Food Item's dataset
 ingredientscsvFile='Ingredients.csv'
 iListDatasetPath=join(dirname(__file__),ingredientscsvFile)
 iList=pd.read_csv(iListDatasetPath, usecols=RecipeLabels)
+
+#This Rule Engine checks if there is an allergic ingredient in food and if the person is allergic to it
 class AllergyEngine(KnowledgeEngine):
-    #Check if there is an allergic ingredient in food and if the person is allergic
-    @Rule(RecipeData(FoodName=MATCH.FoodName,ingredient=MATCH.ingredient),
+    #Check if there is an allergic ingredient from the food item
+     @Rule(RecipeData(FoodName=MATCH.FoodName,ingredient=MATCH.ingredient),
           PatientData(allergyToCheese=MATCH.allergyToCheese),
-          OR(
-               AND(
-                TEST(lambda allergyToTomato, ALT:allergyToTomato==True),
-                TEST(lambda ingredient,item:ingredient=="Tomato")
-               ),
-               AND(
+          AND(
                 TEST(lambda allergyToCheese, ALC:allergyToCheese==True),
                 TEST(lambda ingredient,item:ingredient=="Cheese")
-               )
           )
      )
-    def AvoidAllergicFoodItems(self,FoodName):
-            #print(FoodName+ " needs to be avoided due to cheese allergy.\n")
-          if(FoodName in recommendList):
-            recommendList.remove(FoodName)
-          if(FoodName not in avoidanceList):
+     def  avoidCheeseAllergicFoods(self,FoodName,ingredient):
+          avoidReasons.append(FoodName+ " needs to be avoided due to "+ingredient+" allergy.")
+          if(FoodName not in recommendList and FoodName not in avoidanceList):
              avoidanceList.append(FoodName)
+          elif (FoodName in recommendList and FoodName not in avoidanceList):
+              recommendList.remove(FoodName)
+              avoidanceList.append(FoodName)
+     @Rule(RecipeData(FoodName=MATCH.FoodName,ingredient=MATCH.ingredient),
+          PatientData(allergyToTomato=MATCH.allergyToTomato),
+          AND(
+                TEST(lambda allergyToTomato, ALC:allergyToTomato==True),
+                TEST(lambda ingredient,item:ingredient=="Tomato")
+          )
+     )
+     def  avoidTomatoAllergicFoods(self,FoodName,ingredient):
+          avoidReasons.append(FoodName+ " needs to be avoided due to "+ingredient+" allergy.")
+          if(FoodName not in recommendList and FoodName not in avoidanceList):
+             avoidanceList.append(FoodName)
+          elif (FoodName in recommendList and FoodName not in avoidanceList):
+              recommendList.remove(FoodName)
+              avoidanceList.append(FoodName)
 
  
 engine2=AllergyEngine() 
@@ -196,13 +205,26 @@ for label in RecipeLabels:
                     )  
             )     
             engine2.run() 
-            
+            engine2.reset()
+           
 
 
-list1="Recommended Foods: "+ str(recommendList)
-list2="Avoided Foods: "+ str(avoidanceList)
+list1=""
+list2=""
+for elem in recommendList:
+     if recommendList.index(elem)==(len(recommendList)-1):
+          list1+=elem
+     else:
+       list1+=elem+","
 
-#Here we are returning two type of food List:Recommended foods to be eaten and high risk foods to be avoided
+for elem in avoidanceList:
+     if avoidanceList.index(elem)==(len(avoidanceList)-1):
+          list2+=elem
+     else:
+       list2+=elem+","
+       
+
+
+#Here we are returning two type of food List:Recommended foods to be eaten and  foods to be avoided if they are risk to our health
 def returnList():
-   return list1,list2
-
+   return list1,list2,str(avoidReasons)
