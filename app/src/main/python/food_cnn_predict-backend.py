@@ -31,6 +31,9 @@ import numpy as np
 import io
 import cv2
 
+
+
+
 #Generate Piechart for the predicted Label
 def sketchPieChart(predictedLabel):
     bio=io.BytesIO()
@@ -118,8 +121,6 @@ def getRiceColorPixel(imgC):
     high_rice = np.array([255,55, 255])
     rice_mask = cv2.inRange(hsv_frame, low_rice, high_rice)
     riceColor = cv2.bitwise_and(imgC, imgC, mask=rice_mask)
-    print("Rice color pixels: "+str(cv2.countNonZero(rice_mask)))
-    #cv2.imshow('Rice',riceColor)
     return cv2.countNonZero(rice_mask)
 
 #Get the color pixels for dhal     
@@ -129,8 +130,6 @@ def getDhalColorPixel(imgC):
     high_dhal = np.array([30, 255, 255])
     dhal_mask = cv2.inRange(hsv_frame, low_dhal, high_dhal)
     dhalColor = cv2.bitwise_and(imgC, imgC, mask=dhal_mask)
-    print("Dhal color pixels: "+str(cv2.countNonZero(dhal_mask)))
-    #cv2.imshow('Dhal',dhalColor)
     return cv2.countNonZero(dhal_mask)
     
 
@@ -140,18 +139,51 @@ def getSambalColorPixel(imgC):
     low_Sambal = np.array([10, 100, 20])
     high_Sambal = np.array([25, 255, 200])
     sambal_mask = cv2.inRange(hsv_frame, low_Sambal, high_Sambal)
-    sambalColor = cv2.bitwise_and(imgC, imgC, mask=sambal_mask)
-    print("Sambal color pixels: "+str(cv2.countNonZero(sambal_mask)))
-    #cv2.imshow('Sambhal',sambalColor) 
+    sambalColor = cv2.bitwise_and(imgC, imgC, mask=sambal_mask) 
     return cv2.countNonZero(sambal_mask)  
+
+#Get the color pixels for Banana          
+def getBananaColorPixel(imgC):
+    hsv_frame = cv2.cvtColor(imgC, cv2.COLOR_BGR2HSV)
+    low_banana = np.array([20,0,0])
+    high_banana = np.array([50,255,255])
+    banana_mask = cv2.inRange(hsv_frame,low_banana, high_banana)
+    bananaColor = cv2.bitwise_and(imgC, imgC, mask=banana_mask)
+    return cv2.countNonZero(banana_mask)  
+
+def erodeImage(imgGray,img):
+  ret, otsu = cv2.threshold(imgGray, 0, 255, 
+  cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+  ret2, triangle = cv2.threshold(imgGray, 0, 255, 
+  cv2.THRESH_BINARY | cv2.THRESH_TRIANGLE)
+  kernels = np.ones((5, 5), np.uint8)
+  img_erode = cv2.erode(img, kernels, iterations=5)
+  return img_erode
+def detectBlobs(imgByteArr):
+  img_stream = BytesIO(imgByteArr)
+  imgC = cv2.imdecode(np.fromstring(img_stream.read(), np.uint8), 1)
+  imgC=cropImageFromRect(imgC,0,0,(imgC.shape[1]-2),(imgC.shape[0]-2))
+
+
+  imgGray = cv2.cvtColor(imgC, cv2.COLOR_BGR2GRAY)
+  imgC=erodeImage(imgGray,imgC)
+  # Set up the detector with default parameters.
+  detector = cv2.SimpleBlobDetector_create()
+  # Detect blobs.
+  keypoints = detector.detect(imgC)
+  # Draw detected blobs as red circles.
+  # cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS ensures the size of the circle corresponds to the size of blob
+  blobs = cv2.drawKeypoints(imgC, keypoints, np.array([]), (255, 0, 0),cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS) 
+  # Show keypoints
+  return len(keypoints)
 
 #Through the percentage of greyness or Dhal color,ensuring there is no misclassifcation of Rice Dhal with other 
 #6 food items or Unknown objects
 def getColorFromImage(imgByteArr):
     img_stream = BytesIO(imgByteArr)
     imgC = cv2.imdecode(np.fromstring(img_stream.read(), np.uint8), 1)
-    total_pixels = 16000
-    
+    total_pixels = imgC.shape[0]*imgC.shape[1]
+    imgC=cropImageFromRect(imgC,0,0,(imgC.shape[1]-2),(imgC.shape[0]-2))
        
     img_pix = 0
     for i in range(len(imgC)):
@@ -165,13 +197,14 @@ def getColorFromImage(imgByteArr):
     percent_riceColor=(getRiceColorPixel(imgC)/img_pix) * 100
     percent_DhalColor=(getDhalColorPixel(imgC)/img_pix) * 100
     percent_SambalColor=(getSambalColorPixel(imgC)/img_pix) * 100
+    percent_BananaColor=(getBananaColorPixel(imgC)/total_pixels) * 100
     
 
-    print("Percentage of Rice Color: "+str(percent_riceColor))
-    print("Percentage of Dhal Color: "+str(percent_DhalColor))
-    print("Percentage of Sambal Color: "+str(percent_SambalColor))
+    # print("Percentage of Rice Color: "+str(percent_riceColor))
+    # print("Percentage of Dhal Color: "+str(percent_DhalColor))
+    # print("Percentage of Sambal Color: "+str(percent_SambalColor))
 
-    return percent_riceColor,percent_DhalColor,percent_SambalColor
+    return percent_riceColor,percent_DhalColor,percent_SambalColor,percent_BananaColor
 
 #Food item recognition from Photo taken from mobile camera
 def classifyFoodImage(byteArray): 
@@ -183,7 +216,7 @@ def classifyFoodImage(byteArray):
     
     #This is where Keras Model does image recognition on food Image 'test_image'
     test_image = Image.open(BytesIO(imgByteArr))
-    test_image = test_image.resize((128,128))
+    test_image = test_image.resize((128,128),3)
     test_image = image_utils.img_to_array(test_image)/255
     test_image = np.expand_dims(test_image, axis=0)
     
@@ -196,21 +229,20 @@ def classifyFoodImage(byteArray):
     predictedLabel = 'Unknown' 
     if result[0][0]==np.max(result) and result[0][0]>0.7:   
         predictedLabel = 'Apple'    
-    if result[0][4]>0.8:
+    if result[0][4]>=0.9:
        predictedLabel = 'Pizza'
 
-    elif result[0][1]==np.max(result) and result[0][1]>0.5:
+    elif result[0][1]==np.max(result) or result[0][1]>=0.3 and verifyColorFromImage[3]>5:
         predictedLabel = 'Banana'
-    elif  result[0][5]>0.0001  and verifyColorFromImage[0]>=7  and verifyColorFromImage[1]>verifyColorFromImage[2] and verifyColorFromImage[1]>1:
-        predictedLabel = 'Rice with Dhal'  
-    elif result[0][2]==np.max(result) and  result[0][2]>0.7:  
+    elif result[0][2]==np.max(result) and  result[0][2]>=0.6:  
         predictedLabel = 'French Fries'
+   
+    elif verifyColorFromImage[0]>=2 and verifyColorFromImage[0]<=60 and verifyColorFromImage[1]<=60 and detectBlobs(imgByteArr)>0:
+        predictedLabel = 'Rice with Dhal'  
+    elif verifyColorFromImage[0]>=7 and verifyColorFromImage[2]>1 or result[0][3]>=0.8 and verifyColorFromImage[0]>=7:        
+             predictedLabel = 'Idly'
     elif result[0][6]==np.max(result) and result[0][6]>0.7:
         predictedLabel = 'Samosa'   
-   
-    elif verifyColorFromImage[0]>=7 and verifyColorFromImage[2]>1:        
-             predictedLabel = 'Idly'
-   
     
     return predictedLabel
 
@@ -222,3 +254,31 @@ def loadCalorieValue(predictedLabel):
     calories=nutritionData.iloc[nutritionData.loc[nutritionData['Nutrient'] == "Calories"].index,1].squeeze()
     return calories
 
+# Grabcut method that replaces background from  the image with black color and leaves only the object
+def cropImageFromRect(imgC,ix,iy,x,y):
+    imgCV=imgC.copy()
+
+    #Width and height of the selected region
+    # width=(x-ix)
+    # height=(y-iy)
+    #Top left point
+    # print(str(ix)+" "+str(iy))
+    # #Bottom Right Point
+    # print(str(x)+" "+str(y))
+    w=x-ix
+    h=y-iy
+     
+    mask=np.zeros(imgCV.shape[:2],np.uint8) 
+    bgModel=np.zeros((1,65),np.float64)
+    #This the extracted object is located
+    fgModel=np.zeros((1,65),np.float64)
+    #Selected Region is constructed
+    # rect = (0,0,width,height)
+    rect = (ix,iy,w,h)
+    
+    #Here we are converting Background of the image as black to extract the object
+    cv2.grabCut(imgCV,mask,rect,bgModel,fgModel,7,cv2.GC_INIT_WITH_RECT)
+    mask2=np.where((mask==2)|(mask==0),0,1).astype('uint8')
+    imgCV = imgCV*mask2[:,:,np.newaxis]
+    return imgCV
+    
