@@ -36,18 +36,18 @@ public class NutrientAnalysisActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent i = getIntent();
-        byteArray = i.getByteArrayExtra("byteArray");
-        if(i.getExtras() != null) {
-            meal = (Meal) i.getSerializableExtra("elem");
-        }
+                       Intent i = getIntent();
+                       byteArray = i.getByteArrayExtra("byteArray");
+                       if(i.getExtras() != null) {
+                          meal = (Meal) i.getSerializableExtra("elem");
+                       }
 
-                   setContentView(R.layout.activity_nutrient_view);
-                   foodName=(TextView)findViewById(R.id.FoodName);
-                   calorieValue=(TextView)findViewById(R.id.calValue);
-                   caloriesView=findViewById(R.id.caloriesView);
-                   vitaminsView=findViewById(R.id.vitaminsView);
-                   mineralsView=findViewById(R.id.mineralsView);
+                       setContentView(R.layout.activity_nutrient_view);
+                       foodName=(TextView)findViewById(R.id.FoodName);
+                       calorieValue=(TextView)findViewById(R.id.calValue);
+                       caloriesView=findViewById(R.id.caloriesView);
+                       vitaminsView=findViewById(R.id.vitaminsView);
+                       mineralsView=findViewById(R.id.mineralsView);
 
                    
                        foodName.setText(meal.foodName);
@@ -59,10 +59,6 @@ public class NutrientAnalysisActivity extends AppCompatActivity {
                        caloriesView.setImageBitmap(bitmap1); 
                        vitaminsView.setImageBitmap(bitmap2);
                        mineralsView.setImageBitmap(bitmap3);                      
-                        
-                   
-                   
-                  
             }
             //Initialize Image views with Bitmap
             public void initalizeImages(Meal meal){
@@ -77,7 +73,6 @@ public class NutrientAnalysisActivity extends AppCompatActivity {
 
             }
             
-
 }
   
 

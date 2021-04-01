@@ -15,7 +15,7 @@ model_weights_path=join(dirname(__file__), 'weights.h5')
 model = load_model(model_path)
 model.load_weights(model_weights_path)
 
-
+firebase_path=join(dirname(__file__), 'smkitchendb-firebase-adminsdk-a8z9b-9634b4119e.json')
 
 #Prediction on a new picture
 from keras.preprocessing import image as image_utils
@@ -31,7 +31,45 @@ import numpy as np
 import io
 import cv2
 
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import db
+import base64
 
+cred = credentials.Certificate(firebase_path)
+firebase_admin.initialize_app(cred,{'databaseURL':'https://smkitchendb.firebaseio.com'})
+ref = db.reference('/')
+testImages_ref=ref.child('TestImages')
+
+class TestStorage:
+        def __init__(self, mobileImg, grabcutImg,predictedLabel):
+            self.mobileImg = mobileImg
+            self.grabcutImg = grabcutImg
+            self.predictedLabel = predictedLabel         
+                
+        # convert image from dtype('uint8') to Base64
+        def convertImageToBytes(self,category):
+            if category=='grabcut':
+                img_test=self.grabcutImg
+            elif category=='mobile':
+                img_test=self.mobileImg
+
+            
+            retval, buffer = cv2.imencode('.jpg', img_test)
+            jpg_as_text = base64.b64encode(buffer).decode("utf-8")
+            return jpg_as_text
+
+
+        def saveTestDataToFireBase(self):
+                mobileByteString=self.convertImageToBytes('mobile')
+                grabcutByteString=self.convertImageToBytes('grabcut')
+                testChildRef =testImages_ref.push()
+                testChildRef.set({
+                    "Mobile_Image":mobileByteString,
+                    "Mobile_GrabcutImage":grabcutByteString,
+                    "Predicted_Label":self.predictedLabel,
+                    "directory":str(dirname(__file__))
+                })
 
 
 #Generate Piechart for the predicted Label
@@ -213,9 +251,15 @@ def classifyFoodImage(byteArray):
     #test_image = Image.open(image_path)
     #image_path=join(dirname(__file__), 'profile.jpg')
     #test_image = Image.open(image_path)
+
+
+    
     
     #This is where Keras Model does image recognition on food Image 'test_image'
     test_image = Image.open(BytesIO(imgByteArr))
+    global opencvImage
+    opencvImage = cv2.cvtColor(np.array(test_image), cv2.COLOR_RGB2BGR)
+
     test_image = test_image.resize((128,128),3)
     test_image = image_utils.img_to_array(test_image)/255
     test_image = np.expand_dims(test_image, axis=0)
@@ -225,7 +269,7 @@ def classifyFoodImage(byteArray):
     
     verifyColorFromImage=getColorFromImage(imgByteArr)
     
-
+    global predictedLabel
     predictedLabel = 'Unknown' 
     if result[0][0]==np.max(result) and result[0][0]>0.7:   
         predictedLabel = 'Apple'    
@@ -244,6 +288,11 @@ def classifyFoodImage(byteArray):
     elif result[0][6]==np.max(result) and result[0][6]>0.7:
         predictedLabel = 'Samosa'   
     
+
+    if predictedLabel!="Unknown":
+        test_Storage=TestStorage(opencvImage,imgCV,predictedLabel)
+        test_Storage.saveTestDataToFireBase()
+
     return predictedLabel
 
 #Load the respective calorie value based on the predicted label
@@ -256,6 +305,7 @@ def loadCalorieValue(predictedLabel):
 
 # Grabcut method that replaces background from  the image with black color and leaves only the object
 def cropImageFromRect(imgC,ix,iy,x,y):
+    global imgCV
     imgCV=imgC.copy()
 
     #Width and height of the selected region
@@ -282,3 +332,5 @@ def cropImageFromRect(imgC,ix,iy,x,y):
     imgCV = imgCV*mask2[:,:,np.newaxis]
     return imgCV
     
+
+   

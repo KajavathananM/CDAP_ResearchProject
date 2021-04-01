@@ -112,9 +112,7 @@ public class NutrientViewActivity extends AppCompatActivity {
                         NutrientViewActivity.this.finish();
                         toast.show();
                     }     
-                   
-                   
-                  
+                    
             }
         },70);     
 
